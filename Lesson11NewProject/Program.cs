@@ -15,7 +15,8 @@ namespace Lesson11NewProject
                 Console.WriteLine($"{report.TailNumber}, {report.AircraftModel}, {report.CompanyName}, {report.Country}");
             }
 
-            reportGenerator.GeneratereportAircraftInEuropeHTML();
+            reportGenerator.GeneratereportAircraftInEUHTML();
+            reportGenerator.GeneratereportAllAircraftsHTML();
 
 
 

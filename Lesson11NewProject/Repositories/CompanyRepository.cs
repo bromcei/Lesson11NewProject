@@ -19,6 +19,10 @@ namespace Lesson11NewProject
             CompaniesList.Add(new Company("Lufthansa", "Carrier", 8, "OctoberFest Straße 15, Dortmund", 1));
             CompaniesList.Add(new Company("TNT", "Cargo", 2, "Burger Street 15, new York", 2));
             CompaniesList.Add(new Company("Air France", "Carrier", 3, "La Bagette venue 13, Paris", 3));
+            CompaniesList.Add(new Company("Norwegian Airlines", "Carrier", 9, "Fjord str 14, Oslo", 4));
+            CompaniesList.Add(new Company("Egypt Airlines", "Carrier", 6, "Pyramid Scheme 15, cairo", 5));
+            CompaniesList.Add(new Company("Level", "Cargo", 5, "", 6));
+            CompaniesList.Add(new Company("Random", "Carrier", 5, "Randominis", 7));
 
         }
 

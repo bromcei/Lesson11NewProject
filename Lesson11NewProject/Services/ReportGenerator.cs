@@ -36,9 +36,16 @@ namespace Lesson11NewProject
                 companyID = plane.CompanyAircraftID;
                 countryID = _companyRepository.Retrieve(companyID).CompanyCountryID;
                 country = _countryRepository.Retrieve(countryID);
-                if (country.IsEU)
+                if (country.IsEuropean)
                 {
-                    reportItem = new ReportItem(plane.TailNumber, _aircraftModelRepository.Retrieve(plane.AircraftModelID).ModelName, _companyRepository.Retrieve(companyID).CompanyName, country.CountryName)
+                    reportItem = new ReportItem(
+                        plane.TailNumber, 
+                        _aircraftModelRepository.Retrieve(plane.AircraftModelID).ModelName, 
+                        _companyRepository.Retrieve(companyID).CompanyName, 
+                        country.Continent, 
+                        country.CountryName,
+                        country.IsEuropean,
+                        country.IsEU)
 ;                   ReportList.Add(reportItem);
                 }
             }
@@ -46,8 +53,42 @@ namespace Lesson11NewProject
 
             return ReportList;
         }
-        
-        public void GeneratereportAircraftInEuropeHTML() 
+
+
+        public List<ReportItem> GenerateReportAllAircrafts()
+        {
+            List<Aircraft> AllAirCrafts = _aircraftRepository.Retrieve();
+            List<ReportItem> ReportList = new List<ReportItem>();
+
+            int companyID;
+            int countryID;
+            Country country;
+            ReportItem reportItem;
+            foreach (Aircraft plane in AllAirCrafts)
+            {
+                companyID = plane.CompanyAircraftID;
+                countryID = _companyRepository.Retrieve(companyID).CompanyCountryID;
+                country = _countryRepository.Retrieve(countryID);
+          
+                reportItem = new ReportItem(
+                plane.TailNumber,
+                _aircraftModelRepository.Retrieve(plane.AircraftModelID).ModelName,
+                _companyRepository.Retrieve(companyID).CompanyName,
+                country.Continent,
+                country.CountryName,
+                country.IsEuropean,
+                country.IsEU);                      
+                ReportList.Add(reportItem);
+               
+            }
+
+
+            return ReportList;
+        }
+
+
+
+        public void GeneratereportAircraftInEUHTML() 
         { 
             DateTime currDate = DateTime.Now;
             string HTMLPath = $"C:\\Users\\tomas.ceida\\source\\repos\\Lesson11NewProject\\Lesson11NewProject\\Reports\\Report_EU_aircrafts_{currDate.ToString("yyyy'-'MM'-'dd'T'HH'_'mm'_'ss")}.html";
@@ -74,13 +115,21 @@ namespace Lesson11NewProject
                 ";
 
             string HTMLTable = "";
-
+            string backGroundColor;
             List<ReportItem> ReportList = GeneratereportAircraftInEurope();
 
             foreach (ReportItem reportItem in ReportList)
             {
+                if (reportItem.IsEu)
+                {
+                    backGroundColor = "#00FFFF";
+                }
+                else
+                {
+                    backGroundColor = "#AA4A44";
+                }
                 HTMLTable += $@"
-                <tr>
+                <tr style=""background-color:{backGroundColor}"">
                 <td>{reportItem.TailNumber}</td>
                 <td>{reportItem.AircraftModel}</td>
                 <td>{reportItem.CompanyName}</td>
@@ -89,6 +138,59 @@ namespace Lesson11NewProject
                 ";
             }
             Console.WriteLine(HTMLUpperPart + HTMLTable + HTMLLowerPart);
+            System.IO.File.WriteAllText(HTMLPath, HTMLUpperPart + HTMLTable + HTMLLowerPart);
+        }
+
+        public void GeneratereportAllAircraftsHTML()
+        {
+            DateTime currDate = DateTime.Now;
+            string HTMLPath = $"C:\\Users\\tomas.ceida\\source\\repos\\Lesson11NewProject\\Lesson11NewProject\\Reports\\Report_All_Aircrafts_{currDate.ToString("yyyy'-'MM'-'dd'T'HH'_'mm'_'ss")}.html";
+
+            string HTMLUpperPart = $@"
+                <!DOCTYPE html>
+                <html>
+                <body>
+                <h1>Aircraft Report {currDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss")} </h1>
+                <table>
+                  <tr>
+                    <th>TailNumber</th>
+                    <th>ModelName</th>
+                    <th>CompanyName</th>
+                    <th>CountryName</th>
+                  </tr>
+                        ";
+
+
+            string HTMLLowerPart = @"
+                </table>
+                </body>
+                </html>
+                ";
+
+            string HTMLTable = "";
+            string backGroundColor;
+            List<ReportItem> ReportList = GenerateReportAllAircrafts();
+
+            foreach (ReportItem reportItem in ReportList)
+            {
+                if (reportItem.IsEu)
+                {
+                    backGroundColor = "#00FFFF";
+                }
+                else
+                {
+                    backGroundColor = "#AA4A44";
+                }
+                HTMLTable += $@"
+                <tr style=""background-color:{backGroundColor}"">
+                <td>{reportItem.TailNumber}</td>
+                <td>{reportItem.AircraftModel}</td>
+                <td>{reportItem.CompanyName}</td>
+                <td>{reportItem.Country}</td>
+                </tr>
+                ";
+            }
+
             System.IO.File.WriteAllText(HTMLPath, HTMLUpperPart + HTMLTable + HTMLLowerPart);
         }
 

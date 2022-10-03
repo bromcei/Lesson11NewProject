@@ -44,7 +44,50 @@ namespace Lesson11NewProject
 
 
             return ReportList;
-
         }
+        
+        public void GeneratereportAircraftInEuropeHTML() 
+        { 
+            DateTime currDate = DateTime.Now;
+            string HTMLPath = $"\\Reports\\Report_EU_aircrafts_{currDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss")}.html";
+
+            string HTMLUpperPart = $@"
+                <!DOCTYPE html>
+                <html>
+                <body>
+                <h1>Aircraft Report {currDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss")} </h1>
+                <table>
+                  <tr>
+                    <th>TailNumber</th>
+                    <th>ModelName</th>
+                    <th>CompanyName</th>
+                    <th>CountryName</th>
+                  </tr>
+                        ";
+
+
+            string HTMLLowerPart = @"
+                </table>
+                </body>
+                </html>
+                ";
+
+            string HTMLTable = "";
+
+            List<ReportItem> ReportList = GeneratereportAircraftInEurope();
+
+            foreach (ReportItem reportItem in ReportList)
+            {
+                HTMLTable += $@"
+                <td>{reportItem.TailNumber}</td>
+                <td>{reportItem.AircraftModel}</td>
+                <td>{reportItem.CompanyName}</td>
+                <td>{reportItem.Country}</td>
+                ";
+            }
+            Console.WriteLine(HTMLUpperPart + HTMLTable + HTMLLowerPart);
+
+         }
+
     }
 }

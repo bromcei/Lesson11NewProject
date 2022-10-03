@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,7 @@ namespace Lesson11NewProject
         public void GeneratereportAircraftInEuropeHTML() 
         { 
             DateTime currDate = DateTime.Now;
-            string HTMLPath = $"\\Reports\\Report_EU_aircrafts_{currDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss")}.html";
+            string HTMLPath = $"C:\\Users\\tomas.ceida\\source\\repos\\Lesson11NewProject\\Lesson11NewProject\\Reports\\Report_EU_aircrafts_{currDate.ToString("yyyy'-'MM'-'dd'T'HH'_'mm'_'ss")}.html";
 
             string HTMLUpperPart = $@"
                 <!DOCTYPE html>
@@ -79,15 +80,17 @@ namespace Lesson11NewProject
             foreach (ReportItem reportItem in ReportList)
             {
                 HTMLTable += $@"
+                <tr>
                 <td>{reportItem.TailNumber}</td>
                 <td>{reportItem.AircraftModel}</td>
                 <td>{reportItem.CompanyName}</td>
                 <td>{reportItem.Country}</td>
+                </tr>
                 ";
             }
             Console.WriteLine(HTMLUpperPart + HTMLTable + HTMLLowerPart);
-
-         }
+            System.IO.File.WriteAllText(HTMLPath, HTMLUpperPart + HTMLTable + HTMLLowerPart);
+        }
 
     }
 }
